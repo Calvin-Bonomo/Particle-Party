@@ -25,20 +25,27 @@ class Particle:
 
         # Iterate through all walls
         # and check for collisions
-        for wallW in walls:
+        for wall in walls:
+            # Don't check walls if
+            # they're too far from
+            # a particle
+            wallToLine = Vector(wall.start.x - self.position.x, wall.start.y - self.position.y)
+            if (wallToLine.magnitude() > wall.line.magnitude()):
+                continue
+
             # If the returned value is
             # greater than 0, the ball
             # is colliding with the wall
-            clipVal = self.intersectsWall(wallW)
+            clipVal = self.intersectsWall(wall)
 
             if (clipVal > 0):
                 # Move the particle out of the wall
-                dPos = Vector(wallW.normal.x, wallW.normal.y)
+                dPos = Vector(wall.normal.x, wall.normal.y)
                 dPos.scalarMultiply(clipVal)
                 self.position.addVector(dPos)
 
                 # Bounce the particle off of the wall
-                self.velocity = self.getReflection(copy.copy(wallW.normal))
+                self.velocity = self.getReflection(copy.copy(wall.normal))
 
                 # Reduce the particle's velocity by
                 # the friction coefficient
