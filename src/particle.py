@@ -29,8 +29,8 @@ class Particle:
             # Don't check walls if
             # they're too far from
             # a particle
-            wallToLine = Vector(wall.start.x - self.position.x, wall.start.y - self.position.y)
-            if (wallToLine.magnitude() > wall.line.magnitude()):
+            wallToLine = vector.subtract(wall.start, self.position)
+            if (vector.magnitude(wallToLine) > vector.magnitude(wall.line)):
                 continue
 
             # If the returned value is
@@ -40,8 +40,7 @@ class Particle:
 
             if (clipVal > 0):
                 # Move the particle out of the wall
-                dPos = Vector(wall.normal.x, wall.normal.y)
-                dPos.scalarMultiply(clipVal)
+                dPos = vector.multiply(wall.normal, clipVal)
                 self.position.addVector(dPos)
 
                 # Bounce the particle off of the wall
@@ -55,7 +54,7 @@ class Particle:
         # Get the dot product of the
         # wall's normal and the
         # particle's velocity
-        wallNormalDot = self.velocity.x * normal.x + self.velocity.y * normal.y
+        wallNormalDot = vector.dot(self.velocity, normal)
         
         # Multiply the dot
         # product by 2
@@ -68,8 +67,7 @@ class Particle:
         # Subtract the scaled normal
         # from the velocity to get
         # the reflection vector
-        reflection = copy.copy(self.velocity)
-        reflection.subtractVector(normal)
+        reflection = vector.subtract(self.velocity, normal)
 
         # Return the reflection
         return reflection
@@ -77,13 +75,12 @@ class Particle:
     def intersectsWall(self, wall1):
         # Get the directional vector
         # representing the wall
-        wallDir = copy.copy(wall1.line)
-        wallDir.normalize()
+        wallDir = vector.normalize(wall1.line)
 
         # Get the length of the line
         # from the start of the wall
         # to the nearest point to the ball
-        projectedMag = wallDir.x * (self.position.x - wall1.start.x) + wallDir.y * (self.position.y - wall1.start.y)
+        projectedMag = vector.dot(wallDir, vector.subtract(self.position, wall1.start))
 
         # Scale the directional vector
         # by the projected magnitude
@@ -91,8 +88,8 @@ class Particle:
 
         # Get the line between the
         # ball and the nearest point on the wall
-        wallToBall = Vector((wallDir.x + wall1.start.x) - self.position.x, (wallDir.y + wall1.start.y) - self.position.y)
+        wallToBall = vector.subtract(vector.add(wallDir, wall1.start), self.position)
 
         # Return the amount the wall
         # is intersecting with the ball
-        return self.size - wallToBall.magnitude()
+        return self.size - vector.magnitude(wallToBall)

@@ -3,6 +3,31 @@ import math
 def dot(v1, v2):
     return v1.x * v2.x + v1.y * v2.y
 
+def add(v1, v2):
+    return Vector(v1.x + v2.x, v1.y + v2.y)
+
+def subtract(v1, v2):
+    return Vector(v1.x - v2.x, v1.y - v2.y)
+
+def divide(v, s):
+    return Vector(v.x / s, v.y / s)
+
+def multiply(v, s):
+    return Vector(v.x * s, v.y * s)
+
+def magnitude(v):
+    return math.sqrt(v.x * v.x + v.y * v.y)
+
+def normalize(v):
+    mag = magnitude(v)
+    return divide(v, mag)
+
+def perp1(v):
+    return Vector(v.y, -v.x)
+
+def perp2(v):
+    return Vector(-v.y, v.x)
+
 class Vector:
     def __init__(self, x, y):
         self.x = x
@@ -29,20 +54,3 @@ class Vector:
     def scalarMultiply(self, s):
         self.x *= s
         self.y *= s
-    
-    def magnitude(self):
-        return math.sqrt(self.x * self.x + self.y * self.y)
-
-    def normalize(self):
-        mag = self.magnitude()
-        self.scalarDivide(mag)
-    
-    def perp1(self):
-        tempX = self.x
-        self.x = self.y
-        self.y = -tempX
-
-    def perp2(self):
-        tempX = self.x
-        self.x = -self.y
-        self.y = tempX

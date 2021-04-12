@@ -37,11 +37,11 @@ def main():
     emitter = Emitter(1, 15, 20, 5, 0.15, Particle, [200, 200])
 
     walls = []
-    walls.append(Wall([10, 390], [390, 390], False))
-    walls.append(Wall([10, 10], [10, 390], False))
-    walls.append(Wall([10, 10], [390, 10], True))
-    walls.append(Wall([390, 390], [390, 10], False))
-    walls.append(Wall([200, 390], [390, 200], False))
+    walls.append(Wall([10, 390], [390, 390], True))
+    walls.append(Wall([10, 10], [10, 390], True))
+    walls.append(Wall([10, 10], [390, 10], False))
+    walls.append(Wall([390, 390], [390, 10], True))
+    walls.append(Wall([200, 390], [390, 200], True))
 
     running = True
     while running:
@@ -51,9 +51,11 @@ def main():
             particleI.update(walls, (gravityXSlider.getValue(), gravityYSlider.getValue()), frictionSlider.getValue())
             pygame.draw.circle(screen, (255, 255, 255), (particleI.position.x, particleI.position.y), particleI.size, 1)
         
-        for wallW in walls:
-            pygame.draw.line(screen, (255, 255, 255), (wallW.start.x, wallW.start.y), (wallW.end.x, wallW.end.y), 1)
-            # pygame.draw.line(screen, (255, 0, 0), (wallW.start.x, wallW.start.y), (wallW.start.x + wallW.normal.x * 10, wallW.start.y + wallW.normal.y * 10), 1)
+        for wall in walls:
+            pygame.draw.line(screen, (255, 255, 255), (wall.start.x, wall.start.y), (wall.end.x, wall.end.y), 1)
+        
+        for wall in walls:
+            pygame.draw.line(screen, (255, 0, 0), (wall.start.x, wall.start.y), (wall.start.x + wall.normal.x * 10, wall.start.y + wall.normal.y * 10), 1)
 
         maxParticlesSlider.drawSlider(screen)
         gravityXSlider.drawSlider(screen)
